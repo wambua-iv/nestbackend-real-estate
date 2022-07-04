@@ -26,7 +26,7 @@ export class AuthService {
       },
       email: dto.email,
       hash: hash,
-      mobile: dto['phone number'],
+      mobile: dto.phone_number,
       ID: dto.ID,
     });
 

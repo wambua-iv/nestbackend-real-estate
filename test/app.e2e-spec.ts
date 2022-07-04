@@ -43,7 +43,7 @@ describe('AppController (e2e)', () => {
         firstname: 'messy',
         lastname: 'wambua',
         ID: 36430147,
-        'phone number': 254728455643,
+        phone_number: '254728455643',
         password: 'messyHunter',
       };
 

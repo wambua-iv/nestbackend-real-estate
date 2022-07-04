@@ -21,9 +21,9 @@ export class SignUpAuthDto {
   @IsNotEmpty()
   ID: number;
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  'phone number': number;
+  phone_number: string;
 }
 
 export class SignInAuthDto {
