@@ -15,9 +15,7 @@ export class AuthService {
     private config: ConfigService,
   ) {}
 
-  async signUp(
-    dto: SignUpAuthDto,
-  ): Promise<void | { access_token: string; refresh_token: string } | ForbiddenException> {
+  async signUp(dto: SignUpAuthDto): Promise<void | { tokens: object; user: object } | ForbiddenException> {
     const hash = await argon.hash(dto.password);
     const user = new this.User({
       name: {
@@ -37,14 +35,15 @@ export class AuthService {
 
         await this.updateUserRefreshToken(tokens.refresh_token, createdUser.email);
 
-        return tokens;
+        return {
+          tokens: tokens,
+          user: { email: createdUser.email, ID: createdUser.ID },
+        };
       })
       .catch((err) => (err.code === 11000 ? new ForbiddenException('Credentials alrady exist') : console.log(err)));
   }
 
-  async signIn(
-    dto: SignInAuthDto,
-  ): Promise<void | { access_token: string; refresh_token: string } | ForbiddenException> {
+  async signIn(dto: SignInAuthDto): Promise<void | { tokens: object; user: object } | ForbiddenException> {
     return await this.User.findOne({ email: dto.email })
       .then(async (exists) => {
         const verifyHash = await argon.verify(exists.hash, dto.password);
@@ -53,7 +52,10 @@ export class AuthService {
         const tokens = await this.signToken(exists.email, exists._id);
         await this.updateUserRefreshToken(tokens.refresh_token, exists.email);
 
-        return tokens;
+        return {
+          tokens: tokens,
+          user: { email: exists.email, ID: exists.ID },
+        };
       })
       .catch((err) =>
         err instanceof ForbiddenException

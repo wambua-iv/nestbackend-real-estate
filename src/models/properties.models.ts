@@ -27,6 +27,9 @@ export class Properties {
   status: string;
 
   @Prop()
+  additional_information: string;
+
+  @Prop()
   approval: string;
 
   @Prop({ type: Array, default: null })

@@ -31,8 +31,8 @@ describe('AppController (e2e)', () => {
   });
 
   afterAll(() => {
-    //dbConnection.collection('properties').deleteMany({});
-    //dbConnection.collection('users').deleteMany({});
+    dbConnection.collection('properties').deleteMany({});
+    dbConnection.collection('users').deleteMany({});
     app.close();
   });
 
