@@ -46,12 +46,12 @@ export class AuthService {
         );
 
         return {
+          _id: createdUser._id,
           tokens: tokens,
           user: {
             email: createdUser.email,
             ID: createdUser.ID,
             name: createdUser.name,
-            _id: createdUser._id,
           },
         };
       })
