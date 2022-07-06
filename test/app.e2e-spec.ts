@@ -5,7 +5,12 @@ import { AppModule } from './../src/app.module';
 import { Connection } from 'mongoose';
 import { DatabaseService } from '@/database/database.service';
 import { SignInAuthDto, SignUpAuthDto } from '@/auth/dto';
-import { CreatePropertyDto, PaymentDto, PropertyTypeDto, TenantDto } from '@/properties/dto';
+import {
+  CreatePropertyDto,
+  PaymentDto,
+  PropertyTypeDto,
+  TenantDto,
+} from '@/properties/dto';
 import { VisitationDto } from '@/users/dto/visit.dto';
 
 describe('AppController (e2e)', () => {
@@ -27,7 +32,9 @@ describe('AppController (e2e)', () => {
     if (process.env.NODE_ENV == 'test') {
       app.listen(3080);
     }
-    dbConnection = moduleFixture.get<DatabaseService>(DatabaseService).getDbHandle();
+    dbConnection = moduleFixture
+      .get<DatabaseService>(DatabaseService)
+      .getDbHandle();
   });
 
   afterAll(() => {
@@ -48,7 +55,11 @@ describe('AppController (e2e)', () => {
       };
 
       it('should signUp', () => {
-        return pactum.spec().post('http://localhost:3080/auth/signup').withBody(signUpDto).expectStatus(200);
+        return pactum
+          .spec()
+          .post('http://localhost:3080/auth/signup')
+          .withBody(signUpDto)
+          .expectStatus(200);
       });
     });
 

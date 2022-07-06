@@ -75,7 +75,12 @@ export class AuthService {
 
         return {
           tokens: tokens,
-          user: { email: exists.email, ID: exists.ID },
+          user: {
+            email: exists.email,
+            ID: exists.ID,
+            name: exists.name,
+            _id: exists._id,
+          },
         };
       })
       .catch((err) =>

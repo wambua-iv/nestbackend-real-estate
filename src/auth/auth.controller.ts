@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { Public } from '@/custom-decorators/setMetaData';
 import { AuthService } from './auth.service';
 import { SignInAuthDto, SignUpAuthDto } from './dto';
