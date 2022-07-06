@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
@@ -15,7 +20,9 @@ export class AuthService {
     private config: ConfigService,
   ) {}
 
-  async signUp(dto: SignUpAuthDto): Promise<void | { tokens: object; user: object } | ForbiddenException> {
+  async signUp(
+    dto: SignUpAuthDto,
+  ): Promise<void | { tokens: object; user: object } | ForbiddenException> {
     const hash = await argon.hash(dto.password);
     const user = new this.User({
       name: {
@@ -33,17 +40,31 @@ export class AuthService {
       .then(async (createdUser) => {
         const tokens = await this.signToken(createdUser.email, createdUser._id);
 
-        await this.updateUserRefreshToken(tokens.refresh_token, createdUser.email);
+        await this.updateUserRefreshToken(
+          tokens.refresh_token,
+          createdUser.email,
+        );
 
         return {
           tokens: tokens,
-          user: { email: createdUser.email, ID: createdUser.ID },
+          user: {
+            email: createdUser.email,
+            ID: createdUser.ID,
+            name: createdUser.name,
+            _id: createdUser._id,
+          },
         };
       })
-      .catch((err) => (err.code === 11000 ? new ForbiddenException('Credentials alrady exist') : console.log(err)));
+      .catch((err) =>
+        err.code === 11000
+          ? new ForbiddenException('Credentials alrady exist')
+          : console.log(err),
+      );
   }
 
-  async signIn(dto: SignInAuthDto): Promise<void | { tokens: object; user: object } | ForbiddenException> {
+  async signIn(
+    dto: SignInAuthDto,
+  ): Promise<void | { tokens: object; user: object } | ForbiddenException> {
     return await this.User.findOne({ email: dto.email })
       .then(async (exists) => {
         const verifyHash = await argon.verify(exists.hash, dto.password);
@@ -96,7 +117,10 @@ export class AuthService {
     }
   }
 
-  async signToken(email: string, userId: string): Promise<{ access_token: string; refresh_token: string }> {
+  async signToken(
+    email: string,
+    userId: string,
+  ): Promise<{ access_token: string; refresh_token: string }> {
     const accessSecret = this.config.get('JWT_SECRET');
     const refreshSecret = this.config.get('JWT_REFRESH_SECRET');
     const payload = {
