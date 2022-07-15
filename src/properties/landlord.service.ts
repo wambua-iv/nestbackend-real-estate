@@ -13,7 +13,7 @@ export class LandLordService {
   ) {}
 
   async registerAsPropertyOwner(dto: PropertyOwnerDto) {
-    return await this.User.updateOne([
+    return await this.User.updateOne(
       { ID: dto.ID },
       {
         $push: {
@@ -23,7 +23,7 @@ export class LandLordService {
           role: 'pending',
         },
       },
-    ]).catch((err) => new InternalServerErrorException(err));
+    ).catch((err) => new InternalServerErrorException(err));
   }
 
   async viewProperties(dto: UserId) {
