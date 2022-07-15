@@ -57,6 +57,16 @@ export class PropertyTypeDto {
   type: string;
 }
 
+export class PropertyOwnerDto {
+  @IsNotEmpty()
+  @IsString()
+  property_registration: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  ID: number;
+}
+
 export class PropertyIdDto {
   @IsString()
   _id: string;
