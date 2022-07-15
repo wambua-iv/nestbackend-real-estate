@@ -13,19 +13,16 @@ export class LandLordService {
   ) {}
 
   async registerAsPropertyOwner(dto: PropertyOwnerDto) {
-    return await this.User.aggregate([
-      { $match: { ID: dto.ID } },
+    return await this.User.updateOne([
+      { ID: dto.ID },
       {
+        $push: {
+          properties: dto.property_registration,
+        },
         $set: {
           role: 'pending',
         },
       },
-      {
-        $set: {
-          properties: { $add: [dto.property_registration] },
-        },
-      },
-      { $project: { name: 1, ID: 1, role: 1 } },
     ]).catch((err) => new InternalServerErrorException(err));
   }
 
