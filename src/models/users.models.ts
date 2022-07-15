@@ -31,6 +31,9 @@ export class Users {
 
   @Prop({ type: Array })
   visits: [];
+
+  @Prop({ type: Array })
+  properties: [];
 }
 
 export const UserSchema = SchemaFactory.createForClass(Users);
