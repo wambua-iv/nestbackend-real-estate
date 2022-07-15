@@ -6,7 +6,7 @@ export type PropertiesDocument = Properties & Document;
 @Schema({ timestamps: true })
 export class Properties {
   @Prop({ required: true })
-  name: string;
+  property_name: string;
 
   @Prop({ required: true })
   type: string;
@@ -29,11 +29,24 @@ export class Properties {
   @Prop()
   additional_information: string;
 
+  @Prop({ type: Object })
+  contact_information: {
+    email: string;
+    name: string;
+    phone_number: number;
+  };
+
+  @Prop({ type: Object })
+  amenities: {
+    washroom: string;
+    bedrooms: string;
+  };
+
+  @Prop()
+  images: [];
+
   @Prop()
   approval: string;
-
-  @Prop({ type: Array, default: null })
-  amenities: [];
 
   @Prop({ type: Array })
   tenants: [];
