@@ -18,6 +18,10 @@ export class LandLordService {
       {
         $set: {
           role: 'pending',
+        },
+      },
+      {
+        $set: {
           properties: { $add: [dto.property_registration] },
         },
       },
