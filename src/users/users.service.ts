@@ -1,5 +1,4 @@
-import { Properties, PropertiesDocument } from '@/models';
-import { UserDocument, Users } from '@/models/users.models';
+import { Users, UserDocument, Properties, PropertiesDocument } from '@/models';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
