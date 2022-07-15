@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { Public } from '@/custom-decorators/setMetaData';
 import { AuthService } from './auth.service';
-import { SignInAuthDto, SignUpAuthDto } from './dto';
+import { RefreshAuthDto, SignInAuthDto, SignUpAuthDto } from './dto';
 
 @Controller('auth')
 export class AuthController {
@@ -24,4 +24,10 @@ export class AuthController {
   // @Get('google/signin')
   // @HttpCode(HttpStatus.OK)
   // async signInWithGoogle() {}
+
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  refreshTokens(@Body() dto: RefreshAuthDto) {
+    return this.authService.refreshToken(dto);
+  }
 }

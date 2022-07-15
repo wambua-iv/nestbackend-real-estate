@@ -9,7 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as argon from 'argon2';
-import { SignInAuthDto, SignUpAuthDto } from './dto';
+import { RefreshAuthDto, SignInAuthDto, SignUpAuthDto } from './dto';
 import { UserDocument, Users } from '@/models';
 
 @Injectable()
@@ -33,6 +33,7 @@ export class AuthService {
       hash: hash,
       mobile: dto.phone_number,
       ID: dto.ID,
+      role: 'user',
     });
 
     return await user
@@ -46,12 +47,10 @@ export class AuthService {
         );
 
         return {
-          _id: createdUser._id,
           tokens: tokens,
           user: {
             email: createdUser.email,
-            ID: createdUser.ID,
-            name: createdUser.name,
+            _id: createdUser._id,
           },
         };
       })
@@ -80,6 +79,8 @@ export class AuthService {
             ID: exists.ID,
             name: exists.name,
             _id: exists._id,
+            role: exists.role,
+            phone_number: exists.mobile,
           },
         };
       })
@@ -92,11 +93,11 @@ export class AuthService {
 
   //async signInWithGoogle() {}
 
-  async refreshToken(email: string, refresh_token: string) {
-    const user = await this.User.findOne({ email: email }).exec();
+  async refreshToken(dto: RefreshAuthDto) {
+    const user = await this.User.findOne({ email: dto.email }).exec();
     if (!user) throw new ForbiddenException('Access Denied');
 
-    const tokenMatch = await argon.verify(user.TokenHash, refresh_token);
+    const tokenMatch = await argon.verify(user.TokenHash, dto.token);
     if (!tokenMatch) throw new ForbiddenException('Access Denied');
 
     const newTokens = await this.signToken(user.email, user._id);
@@ -133,7 +134,7 @@ export class AuthService {
       email,
     };
     const accessToken = await this.jwt.signAsync(payload, {
-      expiresIn: '15m',
+      expiresIn: '90m',
       secret: accessSecret,
     });
     const refreshToken = await this.jwt.signAsync(payload, {
