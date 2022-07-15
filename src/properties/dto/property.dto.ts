@@ -1,4 +1,11 @@
-import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsObject,
+  IsString,
+} from 'class-validator';
 
 export class CreatePropertyDto {
   @IsNotEmpty()
@@ -7,7 +14,7 @@ export class CreatePropertyDto {
 
   @IsNotEmpty()
   @IsString()
-  name: string;
+  property_name: string;
 
   @IsNotEmpty()
   @IsNumber()
@@ -21,11 +28,27 @@ export class CreatePropertyDto {
   @IsString()
   description: string;
 
+  @IsString()
+  additional_information: string;
+
+  @IsObject()
+  contact_information: {
+    email: string;
+    name: string;
+    phone_number: number;
+  };
+
   @IsArray()
-  amenities: [];
+  images: [];
 
   @IsNumber()
   price: number;
+
+  @IsObject()
+  amenities: {
+    washroom: string;
+    bedrooms: string;
+  };
 }
 
 export class PropertyTypeDto {
@@ -35,9 +58,8 @@ export class PropertyTypeDto {
 }
 
 export class PropertyIdDto {
-  @IsNotEmpty()
   @IsString()
-  id: string;
+  _id: string;
 }
 
 export class TenantDto {
@@ -55,5 +77,5 @@ export class TenantDto {
 
   @IsNotEmpty()
   @IsBoolean()
-  current: boolean;
+  booked: boolean;
 }

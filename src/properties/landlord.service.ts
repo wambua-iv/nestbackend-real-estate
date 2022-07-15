@@ -14,13 +14,13 @@ export class LandLordService {
   async registerAsPropertyOwner(dto: UserId) {
     return await this.User.aggregate([
       { $match: { ID: dto.ID } },
-      { $set: { role: 'property owner' } },
+      { $set: { role: 'pending' } },
       { $project: { name: 1, ID: 1, role: 1 } },
     ]);
   }
 
   async viewProperties(dto: UserId) {
-    return await this.Property.find({ ownerId: dto.ID });
+    return await this.Property.find({ ownerId: dto.ID }).then((data) => data);
   }
 
   async viewVacantProperties() {
@@ -28,6 +28,8 @@ export class LandLordService {
   }
 
   async setPropertyVacant() {
-    return this.Property.aggregate([{ $match: { status: 'vacant', approved: 'verified' } }]);
+    return this.Property.aggregate([
+      { $match: { status: 'vacant', approved: 'verified' } },
+    ]);
   }
 }
