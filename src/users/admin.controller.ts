@@ -1,5 +1,6 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AdminService } from './admin.service';
+import { UserId } from './dto/user.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -13,5 +14,10 @@ export class AdminController {
   @Get('pending_verification')
   getPendingVerifications() {
     return this.adminService.getPendingVerifications();
+  }
+
+  @Post('verify_property_owner')
+  verifyPropertyOwner(@Body() dto: UserId) {
+    return this.adminService.verifyPropertyOwner(dto);
   }
 }
