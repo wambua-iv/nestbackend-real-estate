@@ -1,5 +1,5 @@
 import { UserId } from '@/users/dto/user.dto';
-import { Body, Controller, Get, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { PropertyOwnerDto } from './dto';
 import { LandLordService } from './landlord.service';
 
@@ -12,7 +12,7 @@ export class LandLordController {
     return this.landlordService.registerAsPropertyOwner(dto);
   }
 
-  @Get('view_properties')
+  @Post('view_properties')
   viewProperties(@Body() dto: UserId) {
     return this.landlordService.viewProperties(dto);
   }
