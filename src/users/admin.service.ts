@@ -26,10 +26,9 @@ export class AdminService {
   }
 
   async verifyPropertyOwner(dto: UserId) {
-    return await this.User.aggregate([
+    return await this.User.updateOne(
       { $match: { ID: dto.ID, role: 'pending' } },
       { $set: { role: 'property owner' } },
-      { $project: { role: 1, ID: 1 } },
-    ]);
+    );
   }
 }
