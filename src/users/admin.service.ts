@@ -29,6 +29,7 @@ export class AdminService {
     return await this.User.aggregate([
       { $match: { ID: dto.ID, role: 'pending' } },
       { $set: { role: 'property owner' } },
+      { $project: { role: 1, ID: 1 } },
     ]);
   }
 }
