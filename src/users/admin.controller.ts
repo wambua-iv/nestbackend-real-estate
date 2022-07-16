@@ -11,7 +11,7 @@ export class AdminController {
     return this.adminService.getPropertyOwners();
   }
 
-  @Get('pending_verification')
+  @Get('pending_verifications')
   getPendingVerifications() {
     return this.adminService.getPendingVerifications();
   }
