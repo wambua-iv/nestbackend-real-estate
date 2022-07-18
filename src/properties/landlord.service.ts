@@ -27,7 +27,25 @@ export class LandLordService {
   }
 
   async viewProperties(dto: UserId) {
-    return await this.Property.find({ ownerId: dto.ID }).then((data) => data);
+    return await this.Property.aggregate([
+      { $match: { ownerId: dto.ID } },
+      {
+        $project: {
+          type: 1,
+          property_name: 1,
+          location: 1,
+          price: 1,
+          description: 1,
+          additional_information: 1,
+          ownerId: 1,
+          contact_information: 1,
+          images: 1,
+          amenities: 1,
+          _id: 1,
+          tenants: 1,
+        },
+      },
+    ]);
   }
 
   async viewVacantProperties() {

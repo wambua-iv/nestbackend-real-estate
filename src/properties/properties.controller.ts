@@ -1,11 +1,11 @@
 import { Public } from '@/custom-decorators/setMetaData';
+import { UserId } from '@/users/dto/user.dto';
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import {
   CreatePropertyDto,
   TenantDto,
   PropertyTypeDto,
   PropertyIdDto,
-  PaymentDto,
 } from './dto';
 import { PropertiesService } from './properties.service';
 
@@ -35,10 +35,10 @@ export class PropertiesController {
     return this.propertiesService.bookProperty(dto);
   }
 
-  // @Post('accept_tenaant')
-  // bookProperty(@Body() dto: TenantDto) {
-  //   return this.propertiesService.bookProperty(dto);
-  // }
+  @Post('bookings')
+  getPropertyBookings(@Body() dto: UserId) {
+    return this.propertiesService.getPropertyBookings(dto);
+  }
 
   @Post('create_listing')
   createPropertyListing(@Body() dto: CreatePropertyDto) {

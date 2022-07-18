@@ -53,8 +53,11 @@ export class PropertiesService {
     ]).catch(() => new InternalServerErrorException('Server Error'));
   }
 
+  //find().then((data: any) => data)
   async getProperties() {
-    return await this.Property.find().then((data: any) => data);
+    return await this.Property.aggregate([
+      { $match: { status: {$ne: 'pending' }}}
+    ]);
   }
 
   async getPropertyById(dto: PropertyIdDto) {
@@ -111,9 +114,10 @@ export class PropertiesService {
           tenants: {
             name: dto.name,
             id: dto.id,
-            current: dto.booked,
+            status: 'pending',
           },
         },
+        $set: { status: 'pending' },
       },
     ).catch(() => new InternalServerErrorException('Server Error'));
   }

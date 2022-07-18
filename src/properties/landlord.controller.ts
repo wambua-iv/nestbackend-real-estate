@@ -21,4 +21,9 @@ export class LandLordController {
   viewVacantProperties() {
     return this.landlordService.viewVacantProperties();
   }
+
+  // @Post('accept_tenaant')
+  // bookProperty(@Body() dto: TenantDto) {
+  //   return this.propertiesService.bookProperty(dto);
+  // }
 }
