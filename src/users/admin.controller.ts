@@ -16,6 +16,11 @@ export class AdminController {
     return this.adminService.getPendingVerifications();
   }
 
+  @Post('get_unverified_owner')
+  getUnverifiedOwner(@Body() dto: UserId) {
+    return this.adminService.getUnverifiedOwner(dto);
+  }
+
   @Post('verify_property_owner')
   verifyPropertyOwner(@Body() dto: UserId) {
     return this.adminService.verifyPropertyOwner(dto);
