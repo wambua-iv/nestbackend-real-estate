@@ -35,9 +35,14 @@ export class PropertiesController {
     return this.propertiesService.bookProperty(dto);
   }
 
-  @Post('bookings')
+  @Post('property_bookings')
   getPropertyBookings(@Body() dto: UserId) {
     return this.propertiesService.getPropertyBookings(dto);
+  }
+
+  @Post('booking')
+  getBooking(@Body() dto: UserId) {
+    return this.propertiesService.getBooking(dto);
   }
 
   @Post('create_listing')

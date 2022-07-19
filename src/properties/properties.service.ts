@@ -1,18 +1,9 @@
-import {
-  Payments,
-  PaymentDocument,
-  Properties,
-  PropertiesDocument,
-} from '@/models';
+import { Properties, PropertiesDocument } from '@/models';
+import { UserId } from '@/users/dto/user.dto';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
-import {
-  CreatePropertyDto,
-  TenantDto,
-  PropertyTypeDto,
-  PaymentDto,
-} from './dto';
+import { CreatePropertyDto, TenantDto, PropertyTypeDto } from './dto';
 import { PropertyIdDto } from './dto/property.dto';
 
 @Injectable()
@@ -53,10 +44,25 @@ export class PropertiesService {
     ]).catch(() => new InternalServerErrorException('Server Error'));
   }
 
-  //find().then((data: any) => data)
   async getProperties() {
     return await this.Property.aggregate([
-      { $match: { status: {$ne: 'pending' }}}
+      { $match: { status: { $ne: 'pending' || 'booked' } } },
+      {
+        $project: {
+          type: 1,
+          property_name: 1,
+          location: 1,
+          price: 1,
+          description: 1,
+          additional_information: 1,
+          ownerId: 1,
+          contact_information: 1,
+          images: 1,
+          amenities: 1,
+          _id: 1,
+          'owner_info.role': 1,
+        },
+      },
     ]);
   }
 
@@ -76,12 +82,66 @@ export class PropertiesService {
           images: 1,
           amenities: 1,
           _id: 1,
-          tenants: 1,
         },
       },
     ])
       .then((data) => data)
       .catch(() => new InternalServerErrorException('Server Error'));
+  }
+
+  async getPropertyBookings(dto: UserId) {
+    return await this.Property.aggregate([
+      {
+        $match: {
+          ownerId: dto.ID,
+          status: 'pending',
+          'tenants.status': 'pending',
+        },
+      },
+      {
+        $project: {
+          type: 1,
+          property_name: 1,
+          location: 1,
+          price: 1,
+          description: 1,
+          additional_information: 1,
+          ownerId: 1,
+          contact_information: 1,
+          images: 1,
+          amenities: 1,
+          _id: 1,
+          tenants: 1,
+        },
+      },
+    ]);
+  }
+
+  async getBooking(dto: UserId) {
+    return await this.Property.aggregate([
+      {
+        $match: {
+          'tenants.status': 'pending',
+          'tenants.id': dto.ID,
+        },
+      },
+      {
+        $project: {
+          type: 1,
+          property_name: 1,
+          location: 1,
+          price: 1,
+          description: 1,
+          additional_information: 1,
+          ownerId: 1,
+          contact_information: 1,
+          images: 1,
+          amenities: 1,
+          _id: 1,
+          tenants: 1,
+        },
+      },
+    ]);
   }
 
   async createPropertyListing(dto: CreatePropertyDto) {
@@ -114,6 +174,7 @@ export class PropertiesService {
           tenants: {
             name: dto.name,
             id: dto.id,
+            email: dto.email,
             status: 'pending',
           },
         },

@@ -2,8 +2,8 @@ import { Properties, PropertiesDocument, UserDocument, Users } from '@/models';
 import { UserId } from '@/users/dto/user.dto';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { PropertyOwnerDto } from './dto';
+import mongoose, { Model } from 'mongoose';
+import { PropertyIdDto, PropertyOwnerDto } from './dto';
 
 @Injectable()
 export class LandLordService {
@@ -52,9 +52,16 @@ export class LandLordService {
     return null;
   }
 
-  async setPropertyVacant() {
-    return this.Property.aggregate([
-      { $match: { status: 'vacant', approved: 'verified' } },
-    ]);
+  async declareVacant(dto: PropertyIdDto) {
+    return this.Property.updateOne(
+      { _id: new mongoose.Types.ObjectId(dto._id) },
+      { $set: { status: 'vacant' } },
+    );
   }
+  // 'tenants.status': 'vacated'
+  // async setPropertyVacant() {
+  //   return this.Property.aggregate([
+  //     { $match: { status: 'vacant', approved: 'verified' } },
+  //   ]);
+  // }
 }

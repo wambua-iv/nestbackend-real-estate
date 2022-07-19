@@ -1,6 +1,7 @@
 import {
   IsArray,
   IsBoolean,
+  IsEmail,
   IsNotEmpty,
   IsNumber,
   IsObject,
@@ -86,6 +87,6 @@ export class TenantDto {
   name: string;
 
   @IsNotEmpty()
-  @IsBoolean()
-  booked: boolean;
+  @IsEmail()
+  email: string;
 }
